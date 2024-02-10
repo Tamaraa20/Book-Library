@@ -1,0 +1,52 @@
+import React, {useState} from 'react'
+import { Link } from 'react-router-dom'
+import '../BookList/Booklist.css'
+import { useGlobalContext } from '../../contextDb'
+
+const Book = (book) => {
+  const { addToFavorites, removeFromFavorites, favorites } = useGlobalContext();
+  const isFavorite = favorites.some((fav) => fav.id === book.id);
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      removeFromFavorites(book);
+    } else {
+      addToFavorites(book);
+    }
+    console.log(book)
+  };
+
+  return (
+    <div className="book-item flex flex-column flex-sb">
+      <div className="book-item-img">
+        <img src={book.coverImg} alt='cover' />
+      </div>
+      <div className="book-item-info text-center">
+        <Link to={`/book/${book.id}`} {...book}>
+          <div className="book-item-info-item title fw-7 fs-8">
+            <span>{book.title}</span>
+          </div>
+        </Link>
+        <div className="book-item-info-item author fs-15">
+          <span className='text-capitalize fw-7'>Author: </span>
+          <span>{book.author}</span>
+        </div>
+        <div className="book-item-info-item edition-count fs-15">
+          <span className='text-capitalize fw-7'>Total Edition: </span>
+          <span>{book.edition_count}</span>
+        </div>
+        <div className="book-item-info-item publish-year fs-15">
+          <span className='text-capitalize fw-7'>First Publish Year: </span>
+          <span>{book.first_publish_year}</span>
+        </div>
+        <div className="book-item-info-item publish-year fs-15">
+          <button className='btn-fav' onClick={toggleFavorite}>
+            {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )  
+}
+
+export default Book
